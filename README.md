@@ -9,6 +9,7 @@
 ```
 
 #Dowload Plugin EconomyAPI [Click here](https://poggit.pmmp.io/p/economyapi)
+
 #Dowload Plugin FormAPI [Click here](https://poggit.pmmp.io/p/FormAPI)
 
 
@@ -33,10 +34,10 @@
 **Command**<br>
 - /shop : เปิด gui chest shop
 - /shop info : เครดิตผู้สร้างปลั๊กอิน
-- /shop category create <ตั้งชื่อรายการ> <ชื่อเต็มของรายการ> <itemId> <itemDamage> : สร้างรายการ- /shop category remove <ชื่อรายการ> : ลบรายการ
-- /shop category additem <ชื่อรายการ> <ราคาชื้อ> <ราคาขาย> <itemId> <itemDamage> : เพิ่มไอเทมในรายการ
-- /shop category removeitem <ชื่อรายการ> <itemId> <itemDamage> : ลบไอเทมในรายการ
-- /shop category icon <ชื่อรายการ> <itemId> <itemDamage> : เปลี่ยนiconในรายการ
+- /shop category create <ตั้งชื่อรายการ> <ชื่อเต็มของรายการ> <item-id> <item-damage> : สร้างรายการ- /shop category remove <ชื่อรายการ> : ลบรายการ
+- /shop category additem <ชื่อรายการ> <ราคาชื้อ> <ราคาขาย> <item-id> <item-damage> : เพิ่มไอเทมในรายการ
+- /shop category removeitem <ชื่อรายการ> <item-id> <item-damage> : ลบไอเทมในรายการ
+- /shop category icon <ชื่อรายการ> <item-id> <item-damage> : เปลี่ยนiconในรายการ
 - /shop category changename <ชื่อรายการ> <ชื่อเต็มของรายการ> : เปลี่ยนชื่อเต็มในรายการ
 - /shop category list : ดูรายการทั้งหมด
 
