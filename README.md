@@ -31,15 +31,27 @@
 | 1.0  | pocketmine api 3.11.0 mcpe 1.14 [Click here](https://github.com/pmmp/PocketMine-MP) | [คลิก](https://github.com/HmmHmmmm/ShopPlugin/releases/1.0) |
 
 
-**Command**<br>
-- /shop : เปิด gui chest shop
-- /shop info : เครดิตผู้สร้างปลั๊กอิน
-- /shop category create <ตั้งชื่อรายการ> <ชื่อเต็มของรายการ> <item-id> <item-damage> : สร้างรายการ- /shop category remove <ชื่อรายการ> : ลบรายการ
-- /shop category additem <ชื่อรายการ> <ราคาชื้อ> <ราคาขาย> <item-id> <item-damage> : เพิ่มไอเทมในรายการ
-- /shop category removeitem <ชื่อรายการ> <item-id> <item-damage> : ลบไอเทมในรายการ
-- /shop category icon <ชื่อรายการ> <item-id> <item-damage> : เปลี่ยนiconในรายการ
-- /shop category changename <ชื่อรายการ> <ชื่อเต็มของรายการ> : เปลี่ยนชื่อเต็มในรายการ
-- /shop category list : ดูรายการทั้งหมด
+
+## Commands
+| command  | description                        | permission                                                 |
+| ---- | ------------------------------------ | ---------------------------------------------------------- |
+| /shop  | เปิด gui chest | true |
+---------------------------------------------------------- |
+| /shop info  | เครดิตผู้สร้างปลั๊กอิน | op |
+---------------------------------------------------------- |
+| /shop category create <ตั้งชื่อรายการ> <ชื่อเต็มของรายการ> <item-id> <item-damage>  | สร้างรายการ | op |
+---------------------------------------------------------- |
+| /shop category remove <ชื่อรายการ>  | ลบรายการ | op |
+---------------------------------------------------------- |
+| /shop category additem <ชื่อรายการ> <ราคาชื้อ> <ราคาขาย> <item-id> <item-damage>  | เพิ่มไอเทมในรายการ | op |
+---------------------------------------------------------- |
+| /shop category removeitem <ชื่อรายการ> <item-id> <item-damage>  | ลบไอเทมในรายการ | op |
+---------------------------------------------------------- |
+| /shop category icon <ชื่อรายการ> <item-id> <item-damage>  | เปลี่ยนiconในรายการ | op |
+---------------------------------------------------------- |
+| /shop category changename <ชื่อรายการ> <ชื่อเต็มของรายการ>  | เปลี่ยนชื่อเต็มในรายการ | op |
+---------------------------------------------------------- |
+| /shop category list  | ดูรายการทั้งหมด | op |
 
 
 ## LICENSE
