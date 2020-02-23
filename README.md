@@ -35,7 +35,7 @@
 **Command**<br>
 - /shop : เปิด gui chest
 - /shop info : เครดิตผู้สร้างปลั๊กอิน
-- /shop c create <ตั้งชื่อรายการ> <ชื่อเต็มของรายการ> <id> <damage> : สร้างรายการ
+- /shop c create <ตั้งชื่อรายการ> <ชื่อเต็มของรายการ> <ไอเทมid> <ไอเทมdamage> : สร้างรายการ
 - /shop c remove <ชื่อรายการ> : ลบรายการ
 - /shop c additem <ชื่อรายการ> <ราคาชื้อ> <ราคาขาย> <itemId> <itemDamage> : เพิ่มไอเทมในรายการ
 - /shop c removeitem <ชื่อรายการ> <itemId> <itemDamage> : ลบไอเทมในรายการ
