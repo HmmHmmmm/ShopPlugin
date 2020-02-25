@@ -28,7 +28,7 @@ Download the plugin EconomyAPI [Click here](https://poggit.pmmp.io/p/economyapi)
 
 
 **How to use**<br>
-- Sample clip [คลิก](https://youtu.be/Rd7uGpD1tIU)
+- Sample clip [click](https://youtu.be/Rd7uGpD1tIU)
 
 
 **Command**<br>
