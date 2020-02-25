@@ -62,7 +62,6 @@ class ChestMenu{
       /*
       * หีบเล็กจะมีช่องทั้งหมด 27ช่อง
       * gui pocket ล่างสุดจะมี 3ช่อง //เผื่อลืม
-      *
       */
       $i = 0;
       if($this->getPlugin()->getCountItems($category) !== 0){
