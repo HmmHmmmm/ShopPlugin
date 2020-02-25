@@ -1,16 +1,68 @@
-![icon](images/1.0/PicsArt_02-18-03.08.04.jpg)
+## ShopPlugin
 
+
+[Language English](#english)
+
+[Language Thai](#thai)
+
+
+
+# English
+
+```diff
+You must install the plugin
+- EconomyAPI
+this plugin will work
+```
+
+Download the plugin EconomyAPI [Click here](https://poggit.pmmp.io/p/economyapi)
+
+
+**Features of plugin**<br>
+- Is a plugin to create a shop to buy and sell
+- You can add/delete item
+- Can choose the amount of item According to the price per piece
+- have gui chest
+- have gui form
+- Have language thai, english (You can edit the language you don't like at, /resources/language)
+
+
+**How to use**<br>
+- Sample clip [คลิก](https://youtu.be/Rd7uGpD1tIU)
+
+
+**Command**<br>
+- /shop : open gui chest
+- /shop category create <NameTheCategory> <FullCategoryName> <ItemId> <ItemDamage> : Create Category
+- /shop category remove <NameCategory> : Remove category
+- /shop category additem <NameCategory> <BuyPrice> <SellPrice> <ItemId> <ItemDamage> : Add items to category
+- /shop category removeitem <NameCategory> <ItemId> <ItemDamage> : Delete items in category
+- /shop category icon <NameCategory> <ItemId> <ItemDamage> : Change icon in category
+- /shop category changename <NameCategory> <FullNameOfCategory> : Change the full name of category
+- /shop category list : See all list of categories
+
+
+**Images**<br>
+![1](https://github.com/HmmHmmmm/ShopPlugin/blob/master/images/2.0/1en.jpg)
+
+![2](https://github.com/HmmHmmmm/ShopPlugin/blob/master/images/2.0/2en.jpg)
+
+![3](https://github.com/HmmHmmmm/ShopPlugin/blob/master/images/2.0/3en.jpg)
+
+![4](https://github.com/HmmHmmmm/ShopPlugin/blob/master/images/2.0/4en.jpg)
+
+![5](https://github.com/HmmHmmmm/ShopPlugin/blob/master/images/2.0/5en.jpg)
+
+
+# Thai
 
 ```diff
 คุณต้องลงปลั๊กอิน
 - EconomyAPI
-- FormAPI
 ถึงปลั๊กอินนี้จะทำงาน
 ```
 
-#Dowload Plugin EconomyAPI [Click here](https://poggit.pmmp.io/p/economyapi)
-
-#Dowload Plugin FormAPI [Click here](https://poggit.pmmp.io/p/FormAPI)
+ดาวโหลดปลั๊กอิน EconomyAPI [Click here](https://poggit.pmmp.io/p/economyapi)
 
 
 **คุณสมบัติของปลั๊กอิน**<br>
@@ -19,22 +71,15 @@
 - สามารถเลือกจำนวนสินค้าตามราคาที่ตั้งต่อชิ้นไว้ได้
 - มี gui chest
 - มี gui form
+- มีภาษา thai english (สามารถแก้ไขภาษาที่คุณไม่ชอบได้ที่ /resources/language)
 
 
 **วิธีใช้งาน**<br>
-- เวอร์ชั่น 1.0 คลิปตัวอย่าง [คลิก](https://youtu.be/Rd7uGpD1tIU)
-
-
-## ดาวโหลด
-| version  | plugin support                        | Download  zip/phar                                                 |
-| ---- | ------------------------------------ | ---------------------------------------------------------- |
-| 1.0  | pocketmine api 3.11.0 mcpe 1.14 [Click here](https://github.com/pmmp/PocketMine-MP) | [คลิก](https://github.com/HmmHmmmm/ShopPlugin/releases/1.0) |
-
+- คลิปตัวอย่าง [คลิก](https://youtu.be/Rd7uGpD1tIU)
 
 
 **Command**<br>
 - /shop : เปิด gui chest
-- /shop info : เครดิตผู้สร้างปลั๊กอิน
 - /shop category create <ตั้งชื่อรายการ> <ชื่อเต็มของรายการ> <ไอเทมId> <ไอเทมDamage> : สร้างรายการ
 - /shop category remove <ชื่อรายการ> : ลบรายการ
 - /shop category additem <ชื่อรายการ> <ราคาชื้อ> <ราคาขาย> <ไอเทมId> <ไอเทมDamage> : เพิ่มไอเทมในรายการ
@@ -44,5 +89,55 @@
 - /shop category list : ดูรายการทั้งหมด
 
 
-## LICENSE
-ใบอนุญาต GPL-3.0 [license](https://github.com/HmmHmmmm/ShopPlugin/blob/master/LICENSE)
+**Images**<br>
+![1](https://github.com/HmmHmmmm/ShopPlugin/blob/master/images/2.0/1th.jpg)
+
+![2](https://github.com/HmmHmmmm/ShopPlugin/blob/master/images/2.0/2th.jpg)
+
+![3](https://github.com/HmmHmmmm/ShopPlugin/blob/master/images/2.0/3th.jpg)
+
+![4](https://github.com/HmmHmmmm/ShopPlugin/blob/master/images/2.0/4th.jpg)
+
+![5](https://github.com/HmmHmmmm/ShopPlugin/blob/master/images/2.0/5th.jpg)
+
+
+# Config
+```
+#Language
+#thai=ภาษาไทย
+#english=English language
+language: english
+```
+  
+
+# Permissions
+```
+permissions:
+  shop:
+    default: false
+    children:
+      shop.command:
+        default: false
+        children:
+          shop.command.info:
+            default: op
+          shop.command.category:
+            default: false
+            children:
+              shop.command.category.create:
+                default: op
+              shop.command.category.remove:
+                default: op
+              shop.command.category.additem:
+                default: op
+              shop.command.category.removeitem:
+                default: op
+              shop.command.category.icon:
+                default: op
+              shop.command.category.changename:
+                default: op
+              shop.command.category.list:
+                default: op
+```
+
+

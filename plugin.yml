@@ -1,30 +1,33 @@
 name: ShopPlugin
-version: 1.0
+version: 2.0
 api: 3.11.0
 author: HmmHmmmmm
 main: hmmhmmmm\shop\Shop
 website: https://github.com/HmmHmmmm/ShopPlugin
 
 permissions:
-    shop.command:
+  shop:
+    default: false
+    children:
+      shop.command:
         default: false
         children:
-            shop.command.info:
+          shop.command.info:
+            default: op
+          shop.command.category:
+            default: false
+            children:
+              shop.command.category.create:
                 default: op
-            shop.command.category:
-                default: false
-                children:
-                    shop.command.category.create:
-                        default: op
-                    shop.command.category.remove:
-                        default: op
-                    shop.command.category.additem:
-                        default: op
-                    shop.command.category.removeitem:
-                        default: op
-                    shop.command.category.icon:
-                        default: op
-                    shop.command.category.changename:
-                        default: op
-                    shop.command.category.list:
-                        default: op
+              shop.command.category.remove:
+                default: op
+              shop.command.category.additem:
+                default: op
+              shop.command.category.removeitem:
+                default: op
+              shop.command.category.icon:
+                default: op
+              shop.command.category.changename:
+                default: op
+              shop.command.category.list:
+                default: op

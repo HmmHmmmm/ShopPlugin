@@ -1,6 +1,8 @@
 <?php
 
-namespace hmmhmmmm\shop;
+namespace hmmhmmmm\shop\ui;
+
+use hmmhmmmm\shop\Shop;
 
 use pocketmine\Player;
 use pocketmine\block\Block;
@@ -40,21 +42,23 @@ class ChestMenu{
    }
    public function sendMenu(): array{
       $array = [];
-      $array[self::EXIT] = Item::get(35, 14, 1)->setCustomName("§cออก");
+      $array[self::EXIT] = Item::get(35, 14, 1)->setCustomName($this->getPlugin()->getLanguage()->getTranslate("chestmenu.exit"));
       $i = 0;
       if($this->getPlugin()->getCountCategory() !== 0){
          foreach($this->getPlugin()->getCategory() as $category){
-            $item = Item::fromString($this->getPlugin()->getCategoryIcon($category));
-            $array[$i] = $item->setCustomName($this->getPlugin()->getCategoryName($category));
-            $i++;
+            if($i < 24){
+               $item = Item::fromString($this->getPlugin()->getCategoryIcon($category));
+               $array[$i] = $item->setCustomName($this->getPlugin()->getCategoryName($category));
+               $i++;
+            }
          }
       }
       return $array;
    }
    public function sendItem(string $category): array{
       $array = [];
-      $array[self::BACK] = Item::get(35, 4, 1)->setCustomName("§eกลับ");
-      $array[self::EXIT] = Item::get(35, 14, 1)->setCustomName("§cออก");
+      $array[self::BACK] = Item::get(35, 4, 1)->setCustomName($this->getPlugin()->getLanguage()->getTranslate("chestmenu.back"));
+      $array[self::EXIT] = Item::get(35, 14, 1)->setCustomName($this->getPlugin()->getLanguage()->getTranslate("chestmenu.exit"));
       /*
       * หีบเล็กจะมีช่องทั้งหมด 27ช่อง
       * gui pocket ล่างสุดจะมี 3ช่อง //เผื่อลืม
@@ -62,17 +66,19 @@ class ChestMenu{
       $i = 0;
       if($this->getPlugin()->getCountItems($category) !== 0){
          foreach($this->getPlugin()->getItems($category) as $itemicon){
-            $item = Item::fromString($itemicon);
-            $buyPrice = $this->getPlugin()->getBuyPrice($category, $itemicon);
-            $sellPrice = $this->getPlugin()->getSellPrice($category, $itemicon);
-            $lore = [
-               "text1" => "ชื้อในราคา ".$buyPrice." ต่อชิ้น\nขายในราคา ".$sellPrice." ต่อชิ้น"
-            ];
-            $tag = new CompoundTag();
-            $tag->setString("รายการ", $category);
-            $item->setCustomBlockData($tag);
-            $array[$i] = $item->setLore($lore);
-            $i++;
+            if($i < 24){
+               $item = Item::fromString($itemicon);
+               $buyPrice = $this->getPlugin()->getBuyPrice($category, $itemicon);
+               $sellPrice = $this->getPlugin()->getSellPrice($category, $itemicon);
+               $lore = [
+                  "text1" => $this->getPlugin()->getLanguage()->getTranslate("chestmenu.senditem.lore", [$buyPrice, $sellPrice])
+               ];
+               $tag = new CompoundTag();
+               $tag->setString("รายการ", $category);
+               $item->setCustomBlockData($tag);
+               $array[$i] = $item->setLore($lore);
+               $i++;
+            }
          }
       }
       return $array;

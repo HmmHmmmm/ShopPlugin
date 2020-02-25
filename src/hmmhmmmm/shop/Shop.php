@@ -2,64 +2,59 @@
 
 namespace hmmhmmmm\shop;
 
-use pocketmine\Player;
-use pocketmine\event\Listener;
-use pocketmine\event\inventory\InventoryTransactionEvent;
-use pocketmine\event\inventory\InventoryCloseEvent;
-use pocketmine\inventory\ChestInventory;
-use pocketmine\inventory\transaction\action\SlotChangeAction;
-use pocketmine\nbt\tag\CompoundTag;
+use hmmhmmmm\shop\cmd\ShopCommand;
+use hmmhmmmm\shop\data\Language;
+use hmmhmmmm\shop\listener\EventListener;
+use hmmhmmmm\shop\ui\ChestMenu;
+use hmmhmmmm\shop\ui\Form;
+
 use pocketmine\plugin\PluginBase;
 use pocketmine\plugin\Plugin;
 use pocketmine\utils\Config;
 
-class Shop extends PluginBase implements Listener{
-   private static $instance = null;
+class Shop extends PluginBase{
    private $prefix = "?";
-   private $facebook = "§cไม่มี";
-   private $youtube = "§cไม่มี";
+   private $facebook = "§cwithout";
+   private $youtube = "§cwithout";
+   private $discord = "§cwithout";
+   private $language = null;
    private $data = null;
    public $array = [];
    private $form = null;
-   private $formapi = null;
    private $moneyapi = null;
    private $chestmenu = null;
 
-   public static function getInstance(){
-      return self::$instance;
-   }
-   public function onLoad(){
-      self::$instance = $this;
-   } 
+   private $langClass = [
+      "thai",
+      "english"
+   ];
+   
    public function onEnable(){
       @mkdir($this->getDataFolder());
+      @mkdir($this->getDataFolder()."language/");
       $this->data = new Config($this->getDataFolder()."shop.yml", Config::YAML, array());
+      $this->saveDefaultConfig();
       $this->prefix = "Shop";
-      $this->facebook = "https://m.facebook.com/phonlakrit.knaongam.1";
-      $this->youtube = "https://m.youtube.com/channel/UCtjvLXDxDAUt-8CXV1eWevA";
+      $this->facebook = "https://bit.ly/39ULjqk";
+      $this->youtube = "https://bit.ly/2HL1j28";
+      $this->discord = "https://discord.gg/n6CmNr";
       $this->form = new Form($this);
       $this->chestmenu = new ChestMenu($this);
-      $this->getServer()->getPluginManager()->registerEvents($this, $this);
-      $cmd = [
-         new ShopCommand($this)
-      ];
-      foreach($cmd as $command){
-         $this->getServer()->getCommandMap()->register($command->getName(), $command);
-      }
-      
-      if($this->getServer()->getPluginManager()->getPlugin("FormAPI") === null){
-         $this->getLogger()->critical("§cปลั๊กนี้จะไม่ทำงาน กรุณาลงปลั๊กอิน FormAPI");
+      $this->getServer()->getPluginManager()->registerEvents(new EventListener($this), $this);
+      $this->getServer()->getCommandMap()->register("ShopPlugin", new ShopCommand($this));
+      $langConfig = $this->getConfig()->getNested("language");
+      if(!in_array($langConfig, $this->langClass)){
+         $this->getLogger()->error("§cNot found language ".$langConfig.", Please try ".implode(", ", $this->langClass));
          $this->getServer()->getPluginManager()->disablePlugin($this);
       }else{
-         $this->formapi = $this->getServer()->getPluginManager()->getPlugin("FormAPI");
+         $this->language = new Language($this, $langConfig);
       }
       if($this->getServer()->getPluginManager()->getPlugin("EconomyAPI") === null){
-         $this->getLogger()->critical("§cปลั๊กนี้จะไม่ทำงาน กรุณาลงปลั๊กอิน EconomyAPI");
+         $this->getLogger()->critical($this->language->getTranslate("notfound.plugin", ["EconomyAPI"]));
          $this->getServer()->getPluginManager()->disablePlugin($this);
       }else{
          $this->moneyapi = $this->getServer()->getPluginManager()->getPlugin("EconomyAPI");
       }
-      $this->getServer()->getLogger()->info($this->getPluginInfo());
    }
    public function getPrefix(): string{
       return "§b[§6".$this->prefix."§b]§f";
@@ -70,18 +65,17 @@ class Shop extends PluginBase implements Listener{
    public function getYoutube(): string{
       return $this->youtube;
    }
-   public function getPluginInfo(): string{
-      $author = $this->getDescription()->getAuthors();
-      $text = "\n".$this->getPrefix()." ชื่อปลั๊กอิน ".$this->getDescription()->getName()."\n".$this->getPrefix()." เวอร์ชั่น ".$this->getDescription()->getVersion()."\n".$this->getPrefix()." รายชื่อผู้สร้าง ".implode(", ", $author)."\n".$this->getPrefix()." คำอธิบายของปลั๊กอิน: ปลั๊กอินนี้ทำแจก โปรดอย่าเอาไปขาย *หากจะเอาไปแจกต่อโปรดให้เครดิตด้วย*\n".$this->getPrefix()." เฟสบุ๊ค ".$this->getFacebook()."\n".$this->getPrefix()." ยูทูป ".$this->getYoutube()."\n".$this->getPrefix()." เว็บไซต์ ".$this->getDescription()->getWebsite();
-      return $text;   }
+   public function getDiscord(): string{
+      return $this->discord;
+   }
+   public function getLanguage(): Language{
+      return $this->language;
+   }
    public function getData(): Config{
       return $this->data;
    }
    public function getForm(): Form{
       return $this->form;
-   }
-   public function getFormAPI(): Plugin{
-      return $this->formapi;
    }
    public function getMoneyAPI(): Plugin{
       return $this->moneyapi;
@@ -89,70 +83,19 @@ class Shop extends PluginBase implements Listener{
    public function getChestMenu(): ChestMenu{
       return $this->chestmenu;
    }
-   public function onInventoryTransaction(InventoryTransactionEvent $event){
-      $transaction = $event->getTransaction();
-      $player = null;
-      $chestinv = null;
-      foreach($transaction->getActions() as $action){
-         if($action instanceof SlotChangeAction){
-            $inventory = $action->getInventory();
-            if($inventory instanceof ChestInventory){
-               foreach($inventory->getViewers() as $assumed){
-                  if($assumed instanceof Player){
-                     $player = $assumed;
-                     $chestinv = $inventory;
-                  }
-               }
-            }
-            if($chestinv !== null){
-               $targetItem = $action->getTargetItem();
-               $sourceItem = $action->getSourceItem();
-               $chestItem = $sourceItem;
-               if(isset($this->array["chestmenu"][$player->getName()])){
-                  $event->setCancelled(true);                 
-                  if($chestItem->getCustomName() == "§cออก"){
-                     $chestinv->onClose($player);
-                  }
-                  if($chestItem->getCustomName() == "§eกลับ"){
-                     $chestinv->setContents($this->getChestMenu()->sendMenu());
-                  }
-                  if($this->getCountCategory() !== 0){
-                     foreach($this->getCategory() as $category){
-                        if($this->getCountItems($category) !== 0){
-                           if($chestItem->getCustomName() == $this->getCategoryName($category)){
-                              $chestinv->clearAll();
-                              $chestinv->setContents($this->getChestMenu()->sendItem($category));
-                           }
-                           if($chestItem->getCustomName() == null){
-                              $id = $chestItem->getId();
-                              $damage = $chestItem->getDamage();
-                              $itemicon = $id.":".$damage;
-                              if($chestItem->hasCustomBlockData()){
-                                 $category = $chestItem->getCustomBlockData()->getString("รายการ");
-                                 $buyPrice = $this->getBuyPrice($category, $itemicon);
-                                 $sellPrice = $this->getSellPrice($category, $itemicon);
-                                 $chestinv->onClose($player);
-                                 $this->getForm()->ShopUI($player, $itemicon, $buyPrice, $sellPrice);
-                              }
-                           }
-                        }
-                     }
-                  }
-               }
-            }
-         }
-      }
-   }
-   public function onInventoryClose(InventoryCloseEvent $event){
-      $player = $event->getPlayer();
-      $inventory = $event->getInventory();
-      if($inventory instanceof ChestInventory){
-         if(isset($this->array["chestmenu"][$player->getName()])){
-            $v3 = $inventory->getHolder(); //ลบ tile chest กันความแลคในอนาคต
-            $player->getLevel()->sendBlocks([$player], [$v3]);
-            unset($this->array["chestmenu"][$player->getName()]);
-         }
-      }
+   public function getPluginInfo(): string{
+      $author = implode(", ", $this->getDescription()->getAuthors());
+      $arrayText = [
+         $this->getPrefix()." ".$this->getLanguage()->getTranslate("plugininfo.name", [$this->getDescription()->getName()]),
+         $this->getPrefix()." ".$this->getLanguage()->getTranslate("plugininfo.version", [$this->getDescription()->getVersion()]),
+         $this->getPrefix()." ".$this->getLanguage()->getTranslate("plugininfo.author", [$author]),
+         $this->getPrefix()." ".$this->getLanguage()->getTranslate("plugininfo.description"),
+         $this->getPrefix()." ".$this->getLanguage()->getTranslate("plugininfo.facebook", [$this->getFacebook()]),
+         $this->getPrefix()." ".$this->getLanguage()->getTranslate("plugininfo.youtube", [$this->getYoutube()]),
+         $this->getPrefix()." ".$this->getLanguage()->getTranslate("plugininfo.website", [$this->getDescription()->getWebsite()]),
+         $this->getPrefix()." ".$this->getLanguage()->getTranslate("plugininfo.discord", [$this->getDiscord()]),
+      ];
+      return implode("\n", $arrayText);
    }
    public function getCategory(): array{
       $shopData = $this->getData();
