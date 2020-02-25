@@ -6,6 +6,8 @@
 [Language Thai](#thai)
 
 
+download ShopPlugin.phar https://poggit.pmmp.io/ci/HmmHmmmm/ShopPlugin/ShopPlugin
+
 
 # English
 
