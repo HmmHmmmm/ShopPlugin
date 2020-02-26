@@ -114,32 +114,30 @@ language: english
 
 # Permissions
 ```
-permissions:
-  shop:
-    default: false
-    children:
-      shop.command:
-        default: false
-        children:
-          shop.command.info:
-            default: op
-          shop.command.category:
-            default: false
-            children:
-              shop.command.category.create:
-                default: op
-              shop.command.category.remove:
-                default: op
-              shop.command.category.additem:
-                default: op
-              shop.command.category.removeitem:
-                default: op
-              shop.command.category.icon:
-                default: op
-              shop.command.category.changename:
-                default: op
-              shop.command.category.list:
-                default: op
+/*
+*
+* Command /shop it can be typed by everyone.
+*
+*/
+shop.command.info:
+  default: op
+shop.command.category:
+  default: false //Not necessary
+  children:
+    shop.command.category.create:
+      default: op
+    shop.command.category.remove:
+      default: op
+    shop.command.category.additem:
+      default: op
+    shop.command.category.removeitem:
+      default: op
+    shop.command.category.icon:
+      default: op
+    shop.command.category.changename:
+      default: op
+    shop.command.category.list:
+      default: op
 ```
 
 
