@@ -14,6 +14,7 @@ class Language{
    private $langEnglish = [
       "reset" => false,
       "notfound.plugin" => "§cThis plugin will not work. Please install the plugin %s",
+      "notfound.libraries" => "§cLibraries %s not found",
       "plugininfo.name" => "§fName plugin %s",
       "plugininfo.version" => "§fVersion %s",
       "plugininfo.author" => "§fList of creators %s",
@@ -107,6 +108,7 @@ class Language{
    private $langThai = [
       "reset" => false,
       "notfound.plugin" => "§cปลั๊กนี้จะไม่ทำงาน กรุณาลงปลั๊กอิน %s",
+      "notfound.libraries" => "§cไม่พบไลบรารี %s",
       "plugininfo.name" => "§fปลั๊กอินชื่อ %s",
       "plugininfo.version" => "§fเวอร์ชั่น %s",
       "plugininfo.author" => "§fรายชื่อผู้สร้าง %s",
@@ -210,6 +212,7 @@ class Language{
             $this->reset();
          }
       }
+      $this->update();
    }
    public function getPlugin(): Shop{
       return $this->plugin;
@@ -234,7 +237,19 @@ class Language{
       }
       $data->save();
    }
-   
+   public function update(): void{
+      $data = $this->getData()->getAll();
+      if(!isset($data["notfound"]["libraries"])){
+         if($this->getLang() == "thai"){
+            $data["notfound"]["libraries"] = $this->langThai["notfound.libraries"];
+         }
+         if($this->getLang() == "english"){
+            $data["notfound"]["libraries"] = $this->langEnglish["notfound.libraries"];
+         }
+         $this->getData()->setAll($data);
+         $this->getData()->save();
+      }
+   }
    public function getTranslate(string $key, array $arrayValue = []): string{
       $data = $this->getData();
       

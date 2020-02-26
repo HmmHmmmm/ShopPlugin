@@ -7,6 +7,7 @@ use hmmhmmmm\shop\data\Language;
 use hmmhmmmm\shop\listener\EventListener;
 use hmmhmmmm\shop\ui\ChestMenu;
 use hmmhmmmm\shop\ui\Form;
+use jojoe77777\FormAPI\Form as jojoe77777Form;
 
 use pocketmine\plugin\PluginBase;
 use pocketmine\plugin\Plugin;
@@ -50,10 +51,16 @@ class Shop extends PluginBase{
          $this->language = new Language($this, $langConfig);
       }
       if($this->getServer()->getPluginManager()->getPlugin("EconomyAPI") === null){
-         $this->getLogger()->critical($this->language->getTranslate("notfound.plugin", ["EconomyAPI"]));
+         $this->getLogger()->error($this->language->getTranslate("notfound.plugin", ["EconomyAPI"]));
          $this->getServer()->getPluginManager()->disablePlugin($this);
+         return;
       }else{
          $this->moneyapi = $this->getServer()->getPluginManager()->getPlugin("EconomyAPI");
+      }
+      if(!class_exists(jojoe77777Form::class)){
+         $this->getLogger()->error($this->language->getTranslate("notfound.libraries", ["FormAPI"]));
+         $this->getServer()->getPluginManager()->disablePlugin($this);
+         return;
       }
    }
    public function getPrefix(): string{
