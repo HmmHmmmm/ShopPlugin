@@ -105,6 +105,7 @@ class Language{
       "form.shopsellconfirm.button2" => "§cNo"
    ];
    
+   
    private $langThai = [
       "reset" => false,
       "notfound.plugin" => "§cปลั๊กนี้จะไม่ทำงาน กรุณาลงปลั๊กอิน %s",

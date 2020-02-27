@@ -5,6 +5,8 @@
 
 [Language Thai](#thai)
 
+This plugin uses Libraries FormAPI and InvMenu No need to install that plugin
+Just load this plugin as .phar
 
 download ShopPlugin.phar dev https://poggit.pmmp.io/ci/HmmHmmmm/ShopPlugin/ShopPlugin
 
