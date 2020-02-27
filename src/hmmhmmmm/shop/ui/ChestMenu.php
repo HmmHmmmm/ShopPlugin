@@ -24,7 +24,7 @@ class ChestMenu{
       return $this->getPlugin()->getPrefix();
    }
    public function create(Player $player): void{
-      $menu = new InvMenu(InvMenu::TYPE_CHEST);
+      $menu = InvMenu::create(InvMenu::TYPE_CHEST);
       $menu->readonly();
       $menu->setListener([$this->plugin->eventListener, "ShopMenu"]);
       $menu->setName($this->getPrefix());
