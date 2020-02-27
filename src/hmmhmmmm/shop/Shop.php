@@ -8,6 +8,8 @@ use hmmhmmmm\shop\listener\EventListener;
 use hmmhmmmm\shop\ui\ChestMenu;
 use hmmhmmmm\shop\ui\Form;
 use jojoe77777\FormAPI\Form as jojoe77777Form;
+use muqsit\invmenu\InvMenu;
+use muqsit\invmenu\InvMenuHandler;
 
 use pocketmine\plugin\PluginBase;
 use pocketmine\plugin\Plugin;
@@ -24,6 +26,7 @@ class Shop extends PluginBase{
    private $form = null;
    private $moneyapi = null;
    private $chestmenu = null;
+   public $eventListener = null;
 
    private $langClass = [
       "thai",
@@ -40,13 +43,14 @@ class Shop extends PluginBase{
       $this->youtube = "https://bit.ly/2HL1j28";
       $this->discord = "https://discord.gg/n6CmNr";
       $this->form = new Form($this);
-      $this->chestmenu = new ChestMenu($this);
-      $this->getServer()->getPluginManager()->registerEvents(new EventListener($this), $this);
+      $this->eventListener = new EventListener($this);
+      $this->getServer()->getPluginManager()->registerEvents($this->eventListener, $this);
       $this->getServer()->getCommandMap()->register("ShopPlugin", new ShopCommand($this));
       $langConfig = $this->getConfig()->getNested("language");
       if(!in_array($langConfig, $this->langClass)){
          $this->getLogger()->error("§cNot found language ".$langConfig.", Please try ".implode(", ", $this->langClass));
          $this->getServer()->getPluginManager()->disablePlugin($this);
+         return;
       }else{
          $this->language = new Language($this, $langConfig);
       }
@@ -61,6 +65,16 @@ class Shop extends PluginBase{
          $this->getLogger()->error($this->language->getTranslate("notfound.libraries", ["FormAPI"]));
          $this->getServer()->getPluginManager()->disablePlugin($this);
          return;
+      }
+      if(!class_exists(InvMenu::class)){
+         $this->getLogger()->error($this->language->getTranslate("notfound.libraries", ["InvMenu"]));
+         $this->getServer()->getPluginManager()->disablePlugin($this);
+         return;
+      }else{
+         if(!InvMenuHandler::isRegistered()){
+            InvMenuHandler::register($this);
+         }
+         $this->chestmenu = new ChestMenu($this);
       }
    }
    public function getPrefix(): string{

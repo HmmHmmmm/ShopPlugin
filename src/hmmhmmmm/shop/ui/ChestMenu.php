@@ -5,12 +5,9 @@ namespace hmmhmmmm\shop\ui;
 use hmmhmmmm\shop\Shop;
 
 use pocketmine\Player;
-use pocketmine\block\Block;
 use pocketmine\item\Item;
-use pocketmine\tile\Tile;
-use pocketmine\tile\Chest as TileChest;
+use muqsit\invmenu\InvMenu;
 use pocketmine\nbt\tag\CompoundTag;
-use pocketmine\math\Vector3;
 
 class ChestMenu{
    private $plugin;
@@ -27,18 +24,13 @@ class ChestMenu{
       return $this->getPlugin()->getPrefix();
    }
    public function create(Player $player): void{
-      $this->getPlugin()->array["chestmenu"][$player->getName()] = true;
-      $v3 = new Vector3($player->getX(), $player->getY() - 5, $player->getZ());
-      $tile = Tile::createTile("Chest", $player->getLevel(), TileChest::createNBT($v3));
-      $block = Block::get(Block::CHEST);
-      $block->x = $tile->x;
-      $block->y = $tile->y;
-      $block->z = $tile->z;
-      $block->level = $tile->getLevel();
-      $block->level->sendBlocks([$player],[$block]);
-      $inventory = $tile->getInventory();
-      $inventory->setContents($this->sendMenu());
-      $player->addWindow($inventory);
+      $menu = new InvMenu(InvMenu::TYPE_CHEST);
+      $menu->readonly();
+      $menu->setListener([$this->plugin->eventListener, "ShopMenu"]);
+      $menu->setName($this->getPrefix());
+      $inv = $menu->getInventory();
+      $inv->setContents($this->sendMenu());
+      $menu->send($player);
    }
    public function sendMenu(): array{
       $array = [];
@@ -48,6 +40,9 @@ class ChestMenu{
          foreach($this->getPlugin()->getCategory() as $category){
             if($i < 24){
                $item = Item::fromString($this->getPlugin()->getCategoryIcon($category));
+               $tag = new CompoundTag();
+               $tag->setString("category", $category);
+               $item->setCustomBlockData($tag);
                $array[$i] = $item->setCustomName($this->getPlugin()->getCategoryName($category));
                $i++;
             }
@@ -59,10 +54,6 @@ class ChestMenu{
       $array = [];
       $array[self::BACK] = Item::get(35, 4, 1)->setCustomName($this->getPlugin()->getLanguage()->getTranslate("chestmenu.back"));
       $array[self::EXIT] = Item::get(35, 14, 1)->setCustomName($this->getPlugin()->getLanguage()->getTranslate("chestmenu.exit"));
-      /*
-      * หีบเล็กจะมีช่องทั้งหมด 27ช่อง
-      * gui pocket ล่างสุดจะมี 3ช่อง //เผื่อลืม
-      */
       $i = 0;
       if($this->getPlugin()->getCountItems($category) !== 0){
          foreach($this->getPlugin()->getItems($category) as $itemicon){
@@ -74,7 +65,7 @@ class ChestMenu{
                   "text1" => $this->getPlugin()->getLanguage()->getTranslate("chestmenu.senditem.lore", [$buyPrice, $sellPrice])
                ];
                $tag = new CompoundTag();
-               $tag->setString("รายการ", $category);
+               $tag->setString("category", $category);
                $item->setCustomBlockData($tag);
                $array[$i] = $item->setLore($lore);
                $i++;
