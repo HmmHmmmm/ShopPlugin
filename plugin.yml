@@ -4,6 +4,8 @@ api: 3.11.0
 author: HmmHmmmmm
 main: hmmhmmmm\shop\Shop
 website: https://github.com/HmmHmmmm/ShopPlugin
+depend:
+- EconomyAPI
 
 permissions:
   shop:
