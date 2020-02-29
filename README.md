@@ -5,7 +5,7 @@
 
 [Language Thai](#thai)
 
-This plugin uses Libraries FormAPI and InvMenu No need to install that plugin
+This plugin uses Libraries `FormAPI` and `InvMenu` No need to install that plugin
 Just load this plugin as .phar
 
 download ShopPlugin.phar dev https://poggit.pmmp.io/ci/HmmHmmmm/ShopPlugin/ShopPlugin
@@ -28,22 +28,22 @@ Download the plugin EconomyAPI [Click here](https://poggit.pmmp.io/p/economyapi)
 - Can choose the amount of item According to the price per piece
 - have gui chest
 - have gui form
-- Have language thai, english (You can edit the language you don't like at, /resources/language)
+- Have language thai, english (You can edit the language you don't like at, `/resources/language`)
 
 
 **How to use**<br>
-- Sample clip [click](https://youtu.be/Rd7uGpD1tIU)
+- Sample clip https://youtu.be/Rd7uGpD1tIU
 
 
 **Command**<br>
-- /shop : open gui chest
-- /shop category create <NameTheCategory> <FullCategoryName> <ItemId> <ItemDamage> : Create Category
-- /shop category remove <NameCategory> : Remove category
-- /shop category additem <NameCategory> <BuyPrice> <SellPrice> <ItemId> <ItemDamage> : Add items to category
-- /shop category removeitem <NameCategory> <ItemId> <ItemDamage> : Delete items in category
-- /shop category icon <NameCategory> <ItemId> <ItemDamage> : Change icon in category
-- /shop category changename <NameCategory> <FullNameOfCategory> : Change the full name of category
-- /shop category list : See all list of categories
+- `/shop` : open gui chest
+- `/shop category create <NameTheCategory> <FullCategoryName> <ItemId> <ItemDamage>` : Create Category
+- `/shop category remove <NameCategory>` : Remove category
+- `/shop category additem <NameCategory> <BuyPrice> <SellPrice> <ItemId> <ItemDamage>` : Add items to category
+- `/shop category removeitem <NameCategory> <ItemId> <ItemDamage>` : Delete items in category
+- `/shop category icon <NameCategory> <ItemId> <ItemDamage>` : Change icon in category
+- `/shop category changename <NameCategory> <FullNameOfCategory>` : Change the full name of category
+- `/shop category list` : See all list of categories
 
 
 **Images**<br>
@@ -75,7 +75,7 @@ Download the plugin EconomyAPI [Click here](https://poggit.pmmp.io/p/economyapi)
 - สามารถเลือกจำนวนสินค้าตามราคาที่ตั้งต่อชิ้นไว้ได้
 - มี gui chest
 - มี gui form
-- มีภาษา thai english (สามารถแก้ไขภาษาที่คุณไม่ชอบได้ที่ /resources/language)
+- มีภาษา thai english (สามารถแก้ไขภาษาที่คุณไม่ชอบได้ที่ `/resources/language`)
 
 
 **วิธีใช้งาน**<br>
@@ -83,14 +83,14 @@ Download the plugin EconomyAPI [Click here](https://poggit.pmmp.io/p/economyapi)
 
 
 **Command**<br>
-- /shop : เปิด gui chest
-- /shop category create <ตั้งชื่อรายการ> <ชื่อเต็มของรายการ> <ไอเทมId> <ไอเทมDamage> : สร้างรายการ
-- /shop category remove <ชื่อรายการ> : ลบรายการ
-- /shop category additem <ชื่อรายการ> <ราคาชื้อ> <ราคาขาย> <ไอเทมId> <ไอเทมDamage> : เพิ่มไอเทมในรายการ
-- /shop category removeitem <ชื่อรายการ> <ไอเทมId> <ไอเทมDamage> : ลบไอเทมในรายการ
-- /shop category icon <ชื่อรายการ> <ไอเทมId> <ไอเทมDamage> : เปลี่ยนiconในรายการ
-- /shop category changename <ชื่อรายการ> <ชื่อเต็มของรายการ> : เปลี่ยนชื่อเต็มในรายการ
-- /shop category list : ดูรายการทั้งหมด
+- `/shop` : เปิด gui chest
+- `/shop category create <ตั้งชื่อรายการ> <ชื่อเต็มของรายการ> <ไอเทมId> <ไอเทมDamage>` : สร้างรายการ
+- `/shop category remove <ชื่อรายการ>` : ลบรายการ
+- `/shop category additem <ชื่อรายการ> <ราคาชื้อ> <ราคาขาย> <ไอเทมId> <ไอเทมDamage>` : เพิ่มไอเทมในรายการ
+- `/shop category removeitem <ชื่อรายการ> <ไอเทมId> <ไอเทมDamage>` : ลบไอเทมในรายการ
+- `/shop category icon <ชื่อรายการ> <ไอเทมId> <ไอเทมDamage>` : เปลี่ยนiconในรายการ
+- `/shop category changename <ชื่อรายการ> <ชื่อเต็มของรายการ>` : เปลี่ยนชื่อเต็มในรายการ
+- `/shop category list` : ดูรายการทั้งหมด
 
 
 **Images**<br>
