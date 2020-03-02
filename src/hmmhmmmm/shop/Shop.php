@@ -4,10 +4,12 @@ namespace hmmhmmmm\shop;
 
 use hmmhmmmm\shop\cmd\ShopCommand;
 use hmmhmmmm\shop\data\Language;
+use hmmhmmmm\shop\database\Database;
+use hmmhmmmm\shop\database\YML;
 use hmmhmmmm\shop\listener\EventListener;
-use hmmhmmmm\shop\ui\ChestMenu;
-use hmmhmmmm\shop\ui\Form;
-use jojoe77777\FormAPI\Form as jojoe77777Form;
+use hmmhmmmm\shop\ui\ShopChest;
+use hmmhmmmm\shop\ui\ShopForm;
+use xenialdan\customui\API as XenialdanCustomUI;
 use muqsit\invmenu\InvMenu;
 use muqsit\invmenu\InvMenuHandler;
 
@@ -23,29 +25,24 @@ class Shop extends PluginBase{
    private $language = null;
    private $data = null;
    public $array = [];
-   private $form = null;
+   private $shopform = null;
    private $moneyapi = null;
-   private $chestmenu = null;
+   private $shopchest = null;
    public $eventListener = null;
+   
+   public $database;
 
    private $langClass = [
       "thai",
       "english"
    ];
    
-   public function onEnable(){
+   public function onEnable(): void{
       @mkdir($this->getDataFolder());
       @mkdir($this->getDataFolder()."language/");
-      $this->data = new Config($this->getDataFolder()."shop.yml", Config::YAML, array());
       $this->saveDefaultConfig();
       $this->prefix = "Shop";
-      $this->facebook = "https://bit.ly/39ULjqk";
       $this->youtube = "https://bit.ly/2HL1j28";
-      $this->discord = "https://discord.gg/n6CmNr";
-      $this->form = new Form($this);
-      $this->eventListener = new EventListener($this);
-      $this->getServer()->getPluginManager()->registerEvents($this->eventListener, $this);
-      $this->getServer()->getCommandMap()->register("ShopPlugin", new ShopCommand($this));
       $langConfig = $this->getConfig()->getNested("language");
       if(!in_array($langConfig, $this->langClass)){
          $this->getLogger()->error("§cNot found language ".$langConfig.", Please try ".implode(", ", $this->langClass));
@@ -53,6 +50,18 @@ class Shop extends PluginBase{
          return;
       }else{
          $this->language = new Language($this, $langConfig);
+         $this->shopform = new ShopForm($this);
+         $this->eventListener = new EventListener($this);
+         $this->getServer()->getCommandMap()->register("ShopPlugin", new ShopCommand($this));
+         $this->getServer()->getPluginManager()->registerEvents(new EventListener($this), $this);
+         switch($this->getConfig()->getNested("database")){
+            case "yml":
+               $this->database = new YML($this, "Yaml");
+               break;
+            default:
+               $this->database = new YML($this, "Yaml");
+               break;
+         }
       }
       if($this->getServer()->getPluginManager()->getPlugin("EconomyAPI") === null){
          $this->getLogger()->error($this->language->getTranslate("notfound.plugin", ["EconomyAPI"]));
@@ -61,8 +70,8 @@ class Shop extends PluginBase{
       }else{
          $this->moneyapi = $this->getServer()->getPluginManager()->getPlugin("EconomyAPI");
       }
-      if(!class_exists(jojoe77777Form::class)){
-         $this->getLogger()->error($this->language->getTranslate("notfound.libraries", ["FormAPI"]));
+      if(!class_exists(XenialdanCustomUI::class)){
+         $this->getLogger()->error($this->language->getTranslate("notfound.libraries", ["CustomUI"]));
          $this->getServer()->getPluginManager()->disablePlugin($this);
          return;
       }
@@ -74,36 +83,46 @@ class Shop extends PluginBase{
          if(!InvMenuHandler::isRegistered()){
             InvMenuHandler::register($this);
          }
-         $this->chestmenu = new ChestMenu($this);
+         $this->shopchest = new ShopChest($this);
       }
    }
+   
    public function getPrefix(): string{
       return "§b[§6".$this->prefix."§b]§f";
    }
+   
    public function getFacebook(): string{
       return $this->facebook;
    }
+   
    public function getYoutube(): string{
       return $this->youtube;
    }
+   
    public function getDiscord(): string{
       return $this->discord;
    }
+   
    public function getLanguage(): Language{
       return $this->language;
    }
-   public function getData(): Config{
-      return $this->data;
+   
+   public function getShopForm(): ShopForm{
+      return $this->shopform;
    }
-   public function getForm(): Form{
-      return $this->form;
-   }
+   
    public function getMoneyAPI(): Plugin{
       return $this->moneyapi;
    }
-   public function getChestMenu(): ChestMenu{
-      return $this->chestmenu;
+   
+   public function getShopChest(): ShopChest{
+      return $this->shopchest;
    }
+   
+   public function getDatabase(): Database{
+      return $this->database;
+   }
+   
    public function getPluginInfo(): string{
       $author = implode(", ", $this->getDescription()->getAuthors());
       $arrayText = [
@@ -118,99 +137,69 @@ class Shop extends PluginBase{
       ];
       return implode("\n", $arrayText);
    }
+   
    public function getCategory(): array{
-      $shopData = $this->getData();
-      $data = $shopData->getAll();
-      return array_keys($data);
+      return $this->getDatabase()->getCategory();
    }
+   
    public function getCountCategory(): int{
-      $shopData = $this->getData();
-      $data = $shopData->getAll();
-      return count($data);
+      return $this->getDatabase()->getCountCategory();
    }
+   
    public function isCategory(string $category): bool{
-      $shopData = $this->getData();
-      $data = $shopData->getAll();
-      return isset($data[$category]);
+      return $this->getDatabase()->isCategory($category);
    }
+   
    public function createCategory(string $category, string $name, string $itemicon): void{
-      $shopData = $this->getData();
-      $data = $shopData->getAll();
-      $data[$category]["name"] = $name;
-      $data[$category]["icon"] = $itemicon;
-      $data[$category]["items"] = [];
-      $shopData->setAll($data);
-      $shopData->save();
+      $this->getDatabase()->createCategory($category, $name, $itemicon);
    }
+   
    public function removeCategory(string $category): void{
-      $shopData = $this->getData();
-      $data = $shopData->getAll();
-      unset($data[$category]);
-      $shopData->setAll($data);
-      $shopData->save();
+      $this->getDatabase()->removeCategory($category);
    }
+   
    public function getCategoryName(string $category): string{
-      $shopData = $this->getData();
-      $data = $shopData->getAll();
-      return $data[$category]["name"];
+      return $this->getDatabase()->getCategoryName($category);
    }
+   
    public function setCategoryName(string $category, string $nameNew): void{
-      $shopData = $this->getData();
-      $data = $shopData->getAll();
-      $data[$category]["name"] = $nameNew;
-      $shopData->setAll($data);
-      $shopData->save();
+      $this->getDatabase()->setCategoryName($category, $nameNew);
    }
+   
    public function getCategoryIcon(string $category): string{
-      $shopData = $this->getData();
-      $data = $shopData->getAll();
-      return $data[$category]["icon"];
+      return $this->getDatabase()->getCategoryIcon($category);
    }
+   
    public function setCategoryIcon(string $category, string $itemiconNew): void{
-      $shopData = $this->getData();
-      $data = $shopData->getAll();
-      $data[$category]["icon"] = $itemiconNew;
-      $shopData->setAll($data);
-      $shopData->save();
+      $this->getDatabase()->setCategoryIcon($category, $itemiconNew);
    }
+   
    public function getItems(string $category): array{
-      $shopData = $this->getData();
-      $data = $shopData->getAll();
-      return array_keys($data[$category]["items"]);
+      return $this->getDatabase()->getItems($category);
    }
+   
    public function getCountItems(string $category): int{
-      $shopData = $this->getData();
-      $data = $shopData->getAll();
-      return count($data[$category]["items"]);
+      return $this->getDatabase()->getCountItems($category);
    }
+   
    public function isItem(string $category, string $itemicon): bool{
-      $shopData = $this->getData();
-      $data = $shopData->getAll();
-      return isset($data[$category]["items"][$itemicon]);
+      return $this->getDatabase()->isItem($category, $itemicon);
    }
+   
    public function addItem(string $category, string $itemicon, int $buyPrice, int $sellPrice): void{
-      $shopData = $this->getData();
-      $data = $shopData->getAll();
-      $data[$category]["items"][$itemicon]["buyPrice"] = $buyPrice;
-      $data[$category]["items"][$itemicon]["sellPrice"] = $sellPrice;
-      $shopData->setAll($data);
-      $shopData->save();
+      $this->getDatabase()->addItem($category, $itemicon, $buyPrice, $sellPrice);
    }
+   
    public function removeItem(string $category, string $itemicon): void{
-      $shopData = $this->getData();
-      $data = $shopData->getAll();
-      unset($data[$category]["items"][$itemicon]);
-      $shopData->setAll($data);
-      $shopData->save();
+      $this->getDatabase()->removeItem($category, $itemicon);
    }
+   
    public function getBuyPrice(string $category, string $itemicon): int{
-      $shopData = $this->getData();
-      $data = $shopData->getAll();
-      return $data[$category]["items"][$itemicon]["buyPrice"];
+      return $this->getDatabase()->getBuyPrice($category, $itemicon);
    }
+   
    public function getSellPrice(string $category, string $itemicon): int{
-      $shopData = $this->getData();
-      $data = $shopData->getAll();
-      return $data[$category]["items"][$itemicon]["sellPrice"];
+      return $this->getDatabase()->getSellPrice($category, $itemicon);
    }
+
 }
