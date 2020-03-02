@@ -66,7 +66,7 @@ class ShopChest{
          $item = Item::fromString($itemicon);
          $items[] = $item;
       }
-      return array_chunk($items, 23);
+      return array_chunk($items, 18);
    }
    
    public function sendCategoryItem(string $category, int $page = 0): array{
@@ -95,6 +95,9 @@ class ShopChest{
             "chestmenu.exit"
          ))
       ];
+      for($i = 18; $i < 24; $i++){
+         $array[$i] = Item::get(160, 3, 1)->setCustomName("???");
+      }
       $i = 0;
       if($this->getPlugin()->getCountItems($category) !== 0){
          foreach($this->makeCategoryItemPage($category)[$page] as $item){
