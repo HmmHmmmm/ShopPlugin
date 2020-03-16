@@ -68,7 +68,7 @@ class ShopForm{
             return;
          }
          $count = (int) $data[2];
-         if($data[1]){
+         if(!$data[1]){
             $price = $buyPrice * $count;
             $this->BuyConfirm($player, $itemicon, $count, $price);
          }else{
