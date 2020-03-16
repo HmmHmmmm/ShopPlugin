@@ -8,6 +8,7 @@ use pocketmine\Player;
 use pocketmine\event\Listener;
 use pocketmine\item\Item;
 use pocketmine\inventory\transaction\action\SlotChangeAction;
+use pocketmine\nbt\tag\IntTag;
 
 class EventListener implements Listener{
    private $plugin;
@@ -52,11 +53,13 @@ class EventListener implements Listener{
                ){
                   if($chestItem->hasCustomBlockData()){
                      $c = $chestItem->getCustomBlockData()->getString("category");
-                     $page = $chestItem->getCustomBlockData()->getInt("page") + 1;
-                     $chestinv->clearAll();
-                     $chestinv->setContents(
-                        $this->plugin->getShopChest()->sendCategoryItem($c, $page)
-                     );
+                     if($chestItem->getCustomBlockData()->hasTag("page", IntTag::class)){
+                        $page = $chestItem->getCustomBlockData()->getInt("page") + 1;
+                        $chestinv->clearAll();
+                        $chestinv->setContents(
+                           $this->plugin->getShopChest()->sendCategoryItem($c, $page)
+                        ); 
+                     }
                   }
                }
                if($chestItem->getCustomName() == null){

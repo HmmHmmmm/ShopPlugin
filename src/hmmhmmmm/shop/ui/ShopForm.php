@@ -49,9 +49,15 @@ class ShopForm{
          $this->lang->getTranslate("form.shopui.stepslider.step1"),
          $this->lang->getTranslate("form.shopui.stepslider.step2")
       ];
-      $form->addElement(new StepSlider(
-         $this->lang->getTranslate("form.shopui.stepslider.title"),
-         $menu
+      $form->addElement(new Toggle(
+         $this->lang->getTranslate(
+            "form.shopui.stepslider.title"
+         )." ".$this->lang->getTranslate(
+            "form.shopui.stepslider.step1"
+         )."|".$this->lang->getTranslate(
+            "form.shopui.stepslider.step2"
+         ),
+         true
       ));
       $form->addElement(new Slider(
          $this->lang->getTranslate("form.shopui.slider.title"),
@@ -62,11 +68,10 @@ class ShopForm{
             return;
          }
          $count = (int) $data[2];
-         if($data[1] == 0){
+         if($data[1]){
             $price = $buyPrice * $count;
             $this->BuyConfirm($player, $itemicon, $count, $price);
-         }
-         if($data[1] == 1){
+         }else{
             $price = $sellPrice * $count;
             $this->SellConfirm($player, $itemicon, $count, $price);
          }
